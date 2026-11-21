@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="home-top">
+  <ul class="side-cats">
+    {% for c in categories %}<li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>{% endfor %}
+  </ul>
+  <div class="banner">
+    <h1>Phones, laptops, TVs and more</h1>
+    <p>Order online and pay when it arrives.</p>
+    <a class="btn btn-lg" href="{% url 'product_list' %}?sale=1">See discounted products</a>
+  </div>
+</div>
+
+{% if sale_products %}
+<section class="block">
+  <div class="block-head"><h2>Discounts</h2><a href="{% url 'product_list' %}?sale=1">All discounts</a></div>
+  <div class="grid">{% for product in sale_products %}{% include 'store/_product_card.html' %}{% endfor %}</div>
+</section>
+{% endif %}
+
+<section class="block">
+  <div class="block-head"><h2>New products</h2><a href="{% url 'product_list' %}">All products</a></div>
+  {% if new_products %}
+    <div class="grid">{% for product in new_products %}{% include 'store/_product_card.html' %}{% endfor %}</div>
+  {% else %}
+    <p class="empty">No products yet. Run <code>python manage.py seed_demo</code> or add products in the admin panel.</p>
+  {% endif %}
+</section>
+{% endblock %}

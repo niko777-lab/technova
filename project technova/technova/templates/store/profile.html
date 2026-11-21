@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}My orders | Technova{% endblock %}
+{% block content %}
+<h1>My orders</h1>
+{% for order in orders %}
+  <section class="order">
+    <div class="block-head"><h2>Order #{{ order.pk }}</h2><span class="status">{{ order.get_status_display }}</span></div>
+    <p class="muted">{{ order.created_at|date:"d M Y, H:i" }}</p>
+    <ul class="mini">
+      {% for item in order.items.all %}<li><span>{{ item.quantity }} × {{ item.name }}</span><span>{{ item.line_total|floatformat:2 }} ₾</span></li>{% endfor %}
+    </ul>
+    <p class="sum sm">{{ order.total|floatformat:2 }} ₾</p>
+  </section>
+{% empty %}
+  <p class="empty">You have no orders yet. <a href="{% url 'product_list' %}">Start shopping</a>.</p>
+{% endfor %}
+{% endblock %}

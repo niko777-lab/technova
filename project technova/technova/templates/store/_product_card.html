@@ -1,0 +1,26 @@
+<article class="card">
+  <a class="card-media" href="{{ product.get_absolute_url }}">
+    {% if product.image %}
+      <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+    {% else %}
+      <span class="ph" aria-hidden="true">{{ product.brand.name }}</span>
+    {% endif %}
+    {% if product.discount_percent %}<span class="badge">-{{ product.discount_percent }}%</span>{% endif %}
+  </a>
+  <div class="card-body">
+    <h3><a href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+    <div class="price-row">
+      <span class="tag">{{ product.price|floatformat:2 }} ₾</span>
+      {% if product.discount_percent %}<s class="old">{{ product.old_price|floatformat:2 }} ₾</s>{% endif %}
+    </div>
+    {% if product.in_stock %}
+      <form method="post" action="{% url 'cart_add' product.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <button class="btn" type="submit">Add to cart</button>
+      </form>
+    {% else %}
+      <p class="muted out">Out of stock</p>
+    {% endif %}
+  </div>
+</article>

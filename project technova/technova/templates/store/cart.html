@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Your cart | Technova{% endblock %}
+{% block content %}
+<h1>Your cart</h1>
+{% if items %}
+<div class="cart">
+  <table class="cart-table">
+    <thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Total</th><th><span class="sr">Remove</span></th></tr></thead>
+    <tbody>
+    {% for item in items %}
+      <tr>
+        <td><a href="{{ item.product.get_absolute_url }}">{{ item.product.name }}</a></td>
+        <td>{{ item.product.price|floatformat:2 }} ₾</td>
+        <td>
+          <form method="post" action="{% url 'cart_update' item.product.id %}" class="inline">
+            {% csrf_token %}
+            <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.product.stock }}" aria-label="Quantity of {{ item.product.name }}">
+            <button class="btn btn-sm" type="submit">Update</button>
+          </form>
+        </td>
+        <td>{{ item.line_total|floatformat:2 }} ₾</td>
+        <td>
+          <form method="post" action="{% url 'cart_remove' item.product.id %}">{% csrf_token %}<button class="link-btn" type="submit">Remove</button></form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <aside class="summary">
+    <p class="muted">Order total</p>
+    <p class="sum">{{ total|floatformat:2 }} ₾</p>
+    <a class="btn btn-lg" href="{% url 'checkout' %}">Go to checkout</a>
+    <a class="reset" href="{% url 'product_list' %}">Keep shopping</a>
+  </aside>
+</div>
+{% else %}
+  <p class="empty">Your cart is empty. <a href="{% url 'product_list' %}">Browse products</a> and add something you like.</p>
+{% endif %}
+{% endblock %}

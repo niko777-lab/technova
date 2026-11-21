@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Checkout | Technova{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+<div class="cart">
+  <form method="post" class="form">
+    {% csrf_token %}
+    {% include 'store/_form_fields.html' %}
+    <button class="btn btn-lg" type="submit">Place order</button>
+  </form>
+  <aside class="summary">
+    <h2>Your order</h2>
+    <ul class="mini">
+      {% for item in items %}<li><span>{{ item.quantity }} × {{ item.product.name }}</span><span>{{ item.line_total|floatformat:2 }} ₾</span></li>{% endfor %}
+    </ul>
+    <p class="muted">Total, pay on delivery</p>
+    <p class="sum">{{ total|floatformat:2 }} ₾</p>
+  </aside>
+</div>
+{% endblock %}

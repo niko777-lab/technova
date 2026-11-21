@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Order placed | Technova{% endblock %}
+{% block content %}
+<section class="narrow">
+  <h1>Order #{{ order.pk }} is placed</h1>
+  <p>Thanks, {{ order.full_name }}. We will call {{ order.phone }} to confirm delivery to {{ order.address }}, {{ order.city }}.</p>
+  <ul class="mini">
+    {% for item in order.items.all %}<li><span>{{ item.quantity }} × {{ item.name }}</span><span>{{ item.line_total|floatformat:2 }} ₾</span></li>{% endfor %}
+  </ul>
+  <p class="sum">{{ order.total|floatformat:2 }} ₾</p>
+  <a class="btn" href="{% url 'product_list' %}">Continue shopping</a>
+</section>
+{% endblock %}
